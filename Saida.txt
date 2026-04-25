@@ -1,0 +1,9 @@
+Número de vértices: 5
+Número de arestas: 5
+Grau mínimo: 1
+Grau máximo: 4
+Grau médio: 2.00
+Mediana dos graus: 2
+
+Componentes conexas: 1
+Componente 1: ['1', '5', '2', '4', '3']

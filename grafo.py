@@ -30,6 +30,16 @@ class Grafo:
         return matrix
 
 
+    def to_adj_vector(self):
+        vetor = []
+
+        for node in self.get_nodes():
+            vizinhos = list(self.get_neighbors(node))
+            vetor.append([node, vizinhos])
+
+        return vetor
+
+
     def add_node(self, node):   #adicionar vértice (ou nó)
         if node not in self.adj_list:
             self.adj_list[node] = set()

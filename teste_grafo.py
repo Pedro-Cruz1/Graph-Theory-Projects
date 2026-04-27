@@ -21,19 +21,18 @@ print(g)
 
 # Teste BFS
 print("\nBFS a partir de A:")
-print(g.bfs("A"))
+parent, level = g.bfs("A")
+print("Pais:", parent)
+print("Níveis:", level)
 
 # Teste DFS
 print("\nDFS a partir de A:")
-print(g.dfs("A"))
+parent = (g.dfs("A"))
+print("Pais:", parent)
 
 # Teste Dijkstra (sem peso → assume peso 1)
 print("\nDijkstra a partir de A:")
 print(g.dijkstra("A"))
-
-# Teste menor caminho
-print("\nMenor caminho de A até D:")
-print(g.shortest_path("A", "D"))
 
 # Teste matriz de adjacência
 print("\nMatriz de adjacência:")
@@ -46,12 +45,22 @@ print("\nVetor de adjacência:")
 v = g.to_adj_vector()
 print(v)
 
-# Teste remoção de aresta
-g.remove_edge("A", "B")
-print("\nApós remover aresta A-B:")
-print(g)
+#Teste distância
+print("\nDistância do grafo(A->D):", g.distance("A", "D"))
+
+# Teste menor caminho
+print("Menor caminho de A até D:")
+print(g.shortest_path("A", "D"))
+
+#Teste diâmetro
+print("\nDiâmetro do grafo:", g.diameter())
 
 # Teste remoção de nó
 g.remove_node("C")
 print("\nApós remover nó C:")
+print(g)
+
+# Teste remoção de aresta
+g.remove_edge("A", "B")
+print("\nApós remover aresta A-B:")
 print(g)

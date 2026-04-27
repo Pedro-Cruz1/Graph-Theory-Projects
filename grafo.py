@@ -118,44 +118,50 @@ class Grafo:
     def bfs(self, start):   #busca em largura
         visited = set()
         queue = [start]
-        order = []
+        parent = {start: None}
+        level = {start: 0}
 
         while queue:
             node = queue.pop(0)
-            if node not in visited:
-                visited.add(node)
-                order.append(node)
-                neighbors = self.get_neighbors(node)
-                for neighbor in neighbors:
-                    if isinstance(neighbor, tuple):
-                        neighbor = neighbor[0]
-                    if neighbor not in visited:
-                        queue.append(neighbor)
 
-        return order
+            neighbors = self.get_neighbors(node)
+
+            for neighbor in neighbors:
+                if isinstance(neighbor, tuple):
+                    neighbor = neighbor[0]
+
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    parent[neighbor] = node
+                    level[neighbor] = level[node] + 1
+                    queue.append(neighbor)
+
+        return parent, level
 
 
     def dfs(self, start):   #busca em profundidade
         visited = set()
         stack = [start]
-        order = []
+        parent = {start: None}
 
         while stack:
             node = stack.pop()
-            if node not in visited:
-                visited.add(node)
-                order.append(node)
-                neighbors = self.get_neighbors(node)
-                for neighbor in sorted(neighbors, reverse=True):
-                    if isinstance(neighbor, tuple):
-                        neighbor = neighbor[0]
-                    if neighbor not in visited:
-                        stack.append(neighbor)
+
+            neighbors = self.get_neighbors(node)
+
+            for neighbor in sorted(neighbors, reverse=True):
+                if isinstance(neighbor, tuple):
+                    neighbor = neighbor[0]
+
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    parent[neighbor] = node
+                    stack.append(neighbor)
                         
-        return order
+        return parent
 
 
-    def dijkstra(self, start):
+    def dijkstra(self, start):  #busca usando dijkstra
         import heapq
 
         distances = {node: float('inf') for node in self.adj_list}
@@ -215,3 +221,22 @@ class Grafo:
         if path[0] == start:
             return path
         return []
+    
+
+    def distance(self, start, end):   #cálculo de distância
+        parent, level = self.bfs(start)
+        return level.get(end, float('inf'))
+    
+
+    def diameter(self): #cálculo de diâmetro
+        max_dist = 0
+
+        for node in self.get_nodes():
+            _, level = self.bfs(node)
+
+            #maior distância alcançável a partir do nó
+            if len(level) > 1: #ignora nós isolados
+                current_max = max(level.values())
+                max_dist = max(max_dist, current_max)
+        
+        return max_dist

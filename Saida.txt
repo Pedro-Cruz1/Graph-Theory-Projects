@@ -6,4 +6,4 @@ Grau médio: 2.00
 Mediana dos graus: 2
 
 Componentes conexas: 1
-Componente 1: ['1', '5', '2', '4', '3']
+Componente 1: tamanho = 5, vértices = ['1', '2', '3', '4', '5']

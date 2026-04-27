@@ -2,6 +2,7 @@ from grafo import Grafo
 
 class Grafo_Entrada_Saida:
 
+    @staticmethod
     def carregar_grafo(caminho):
         g = Grafo(directed=False)
     
@@ -21,7 +22,7 @@ class Grafo_Entrada_Saida:
 
         return g
     
-
+    @staticmethod
     def analisar(g):
         graus = [len(g.get_neighbors(n)) for n in g.get_nodes()]
 
@@ -47,18 +48,29 @@ class Grafo_Entrada_Saida:
             "mediana": mediana 
         }
     
+    @staticmethod
     def componentes_conexas(g):
         visitados = set()
         componentes = []
 
-        for node in g.get_nodes():
+        for node in sorted(g.get_nodes()):
             if node not in visitados:
-                comp = g.bfs(node)
-                componentes.append(comp)
+                parent, _ = g.bfs(node)
+                comp = sorted(parent.keys())
+
                 visitados.update(comp)
+
+                componentes.append({
+                    "tamanho": len(comp),
+                    "vertices": comp
+                })
+        
+        #ordenar por ordem decrescente
+        componentes.sort(key=lambda c: c["tamanho"], reverse=True)
 
         return componentes
     
+    @staticmethod
     def salvar(g, caminho_saida):
 
         stats = Grafo_Entrada_Saida.analisar(g)
@@ -74,4 +86,4 @@ class Grafo_Entrada_Saida:
 
             f.write(f"Componentes conexas: {len(comps)}\n")
             for i, comp in enumerate(comps, 1):
-                f.write(f"Componente {i}: {comp}\n")
+                f.write(f"Componente {i}: tamanho = {comp['tamanho']}, vértices = {comp['vertices']}\n")

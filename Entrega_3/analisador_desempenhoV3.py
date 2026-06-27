@@ -9,13 +9,13 @@ try:
 except ImportError:
     psutil = None
 
-from grafo import Grafo
-from grafo_entrada_e_saida import Grafo_Entrada_Saida
+from grafoV3 import Grafo
+from grafo_entrada_e_saidaV3 import Grafo_Entrada_Saida
 
 INF = float("inf")
 
 # Configurações
-REPETICOES = 10
+REPETICOES = 2
 
 
 class AnalisadorDesempenho:
@@ -105,17 +105,25 @@ class AnalisadorDesempenho:
             return []
 
         caminho = []
+        visitados = set()
 
         atual = destino
 
         while atual is not None:
+
+            if atual in visitados:
+                # ciclo encontrado
+                print(f"Ciclo detectado na reconstrução do caminho em {atual}")
+                return []
+
+            visitados.add(atual)
 
             caminho.append(atual)
 
             if atual == origem:
                 break
 
-            atual = parent[atual]
+            atual = parent.get(atual)
 
         caminho.reverse()
 
@@ -232,6 +240,8 @@ class AnalisadorDesempenho:
 
         dist_bellman, pais_bellman, ciclo_negativo = \
             invertido.bellman_ford("100")
+        
+        print(f"{os.path.basename(caminho_arquivo)} -> ciclo negativo: {ciclo_negativo}")
 
         with open(caminho_saida, "w", encoding="utf-8") as arq:
 
@@ -245,7 +255,7 @@ class AnalisadorDesempenho:
             arq.write(f"Pesos negativos: {possui_negativo}\n")
             arq.write(f"Ciclo negativo: {ciclo_negativo}\n")
             arq.write(f"Memória utilizada: {memoria_usada:.2f} MB\n")
-            arq.write(f"Tempo médio Bellman-Ford (10 execuções): "
+            arq.write(f"Tempo médio Bellman-Ford (2 execuções): "
                       f"{tempo_bellman:.6f} s\n")
 
             AnalisadorDesempenho.escrever_resultados_bellman(
@@ -265,35 +275,8 @@ class AnalisadorDesempenho:
                         "100"
                     )
 
-                dist_dijkstra = invertido.dijkstra("100")
+                dist_dijkstra, pais_dijkstra = invertido.dijkstra("100")
 
-                # Reconstrução da árvore de caminhos usando Dijkstra
-                pais_dijkstra = {v: None for v in invertido.get_nodes()}
-
-                import heapq
-
-                heap = [(0, "100")]
-                visitados = set()
-
-                while heap:
-
-                    dist, u = heapq.heappop(heap)
-
-                    if u in visitados:
-                        continue
-
-                    visitados.add(u)
-
-                    for v, peso in invertido.get_neighbors(u):
-
-                        if dist + peso == dist_dijkstra[v]:
-                            if pais_dijkstra[v] is None:
-                                pais_dijkstra[v] = u
-
-                            heapq.heappush(
-                                heap,
-                                (dist_dijkstra[v], v)
-                            )
 
                 arq.write("\n")
                 arq.write("=" * 60 + "\n")
@@ -301,7 +284,7 @@ class AnalisadorDesempenho:
                 arq.write("=" * 60 + "\n")
 
                 arq.write(
-                    f"\nTempo médio Dijkstra (10 execuções): "
+                    f"\nTempo médio Dijkstra (2 execuções): "
                     f"{tempo_dijkstra:.6f} s\n"
                 )
 
@@ -317,8 +300,8 @@ class AnalisadorDesempenho:
 
 def main():
 
-    pasta_entrada = "grafos"
-    pasta_saida = "resultados"
+    pasta_entrada = "grafos_teste"
+    pasta_saida = "resultados_teste"
 
     os.makedirs(pasta_saida, exist_ok=True)
 

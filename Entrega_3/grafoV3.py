@@ -279,7 +279,10 @@ class Grafo:
         vertices = self.get_nodes()
 
     
-        for _ in range(len(vertices) - 1):
+        for i in range(len(vertices) - 1):
+
+            if i % 100 == 0:
+                print(f"Bellman-Ford: iteração {i}/{len(vertices)-1}")
 
             updated = False
 

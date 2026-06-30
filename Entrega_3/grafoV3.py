@@ -281,7 +281,7 @@ class Grafo:
     
         for i in range(len(vertices) - 1):
 
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 print(f"Bellman-Ford: iteração {i}/{len(vertices)-1}")
 
             updated = False
@@ -301,6 +301,7 @@ class Grafo:
 
             # Otimização 1: parada antecipada
             if not updated:
+                print(f"Parada antecipada na iteração {i}")
                 break
 
         # Verificação de ciclo negativo

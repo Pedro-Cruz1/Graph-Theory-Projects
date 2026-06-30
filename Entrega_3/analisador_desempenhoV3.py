@@ -15,7 +15,7 @@ from grafo_entrada_e_saidaV3 import Grafo_Entrada_Saida
 INF = float("inf")
 
 # Configurações
-REPETICOES = 2
+REPETICOES = 1
 
 
 class AnalisadorDesempenho:
@@ -300,8 +300,8 @@ class AnalisadorDesempenho:
 
 def main():
 
-    pasta_entrada = "grafos_teste"
-    pasta_saida = "resultados_teste"
+    pasta_entrada = "grafos"
+    pasta_saida = "resultados"
 
     os.makedirs(pasta_saida, exist_ok=True)
 
